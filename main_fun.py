@@ -54,6 +54,8 @@ class TokenEncode(object):
 
 
 if __name__ == '__main__':
-    te = TokenEncode('../Bert-Chinese-Text-Classification-Pytorch/bert_pretrain', 32)
+    bert_path = 'D:/Work/Update_Everyday/Bert-Chinese-Text-Classification-Pytorch/bert_pretrain'
+    pad_size = 32
+    te = TokenEncode(bert_path, pad_size)
     a, b = te.get_encode('我是一只小可爱a')
     print(a.shape, b.shape)

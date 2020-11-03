@@ -19,3 +19,4 @@ print(a.shape, b.shape)
 ```
 
 - bert_path为模型所在的路径
+- pad_size为句子的最大长度
