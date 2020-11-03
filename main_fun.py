@@ -1,7 +1,7 @@
 # coding: UTF-8
 import torch
 import numpy as np
-from pytorch_pretrained import BertModel, BertTokenizer
+from pytorch_pretrain import BertModel, BertTokenizer
 
 
 class TokenEncode(object):
