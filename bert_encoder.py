@@ -24,7 +24,7 @@ class TokenEncode(object):
         token = ['[CLS]'] + token
         seq_len = len(token)
         # 根据vocab.txt将token列表转换成index列表
-        print(token)
+        # print(token)
         token_ids = self.tokenizer.convert_tokens_to_ids(token)
 
         if len(token) < self.pad_size:
@@ -42,12 +42,12 @@ class TokenEncode(object):
 
     def get_encode(self, text):
         token_ids, seq_len, mask = self.get_token_li(text)
-        print(token_ids)
-        print(mask)
+        # print(token_ids)
+        # print(mask)
         token_ids = torch.tensor(token_ids).reshape(-1, self.pad_size).to(self.device)
         mask = torch.tensor(mask).reshape(-1, self.pad_size).to(self.device)
-        print(token_ids.shape)
-        print(mask)
+        # print(token_ids.shape)
+        # print(mask)
         two_dim, pooled = self.bert(token_ids, attention_mask=mask, output_all_encoded_layers=False)
         return two_dim, pooled
 
