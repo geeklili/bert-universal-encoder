@@ -57,4 +57,4 @@ if __name__ == '__main__':
     pad_size = 32
     te = TokenEncode(bert_path, pad_size)
     a, b = te.get_encode('我是一只小可爱a')
-    print(a, b)
+    print(a.shape, b.shape)
