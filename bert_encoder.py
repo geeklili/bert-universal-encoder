@@ -23,7 +23,6 @@ class TokenEncode(object):
         token = self.tokenizer.tokenize(content)
         token = ['[CLS]'] + token
         seq_len = len(token)
-        mask = []
         # 根据vocab.txt将token列表转换成index列表
         print(token)
         token_ids = self.tokenizer.convert_tokens_to_ids(token)
@@ -58,4 +57,4 @@ if __name__ == '__main__':
     pad_size = 32
     te = TokenEncode(bert_path, pad_size)
     a, b = te.get_encode('我是一只小可爱a')
-    print(a.shape, b.shape)
+    print(a, b)
