@@ -41,6 +41,11 @@ class TokenEncode(object):
         return token_ids, seq_len, mask
 
     def get_encode(self, text):
+        """
+        这个函数的输出是编好码的bert输出，包含了两个tensor返回结果，用于最终确定的不需要训练参数的文字编码
+        :param text:
+        :return:
+        """
         token_ids, seq_len, mask = self.get_token_li(text)
         # print(token_ids)
         # print(mask)
@@ -52,6 +57,11 @@ class TokenEncode(object):
         return two_dim, pooled
 
     def get_token_mask(self, text):
+        """
+        这个寒素的输出分别是文字的列表和mask列表输出，这个用于bert-fine-tune
+        :param text:
+        :return:
+        """
         token_ids, seq_len, mask = self.get_token_li(text)
         # print(token_ids)
         # print(mask)
