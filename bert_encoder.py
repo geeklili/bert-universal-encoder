@@ -51,10 +51,23 @@ class TokenEncode(object):
         two_dim, pooled = self.bert(token_ids, attention_mask=mask, output_all_encoded_layers=False)
         return two_dim, pooled
 
+    def get_token_mask(self, text):
+        token_ids, seq_len, mask = self.get_token_li(text)
+        # print(token_ids)
+        # print(mask)
+        token_ids = torch.tensor(token_ids).reshape(-1, self.pad_size).to(self.device)
+        mask = torch.tensor(mask).reshape(-1, self.pad_size).to(self.device)
+        # print(token_ids.shape)
+        # print(mask)
+        return token_ids, mask
+
 
 if __name__ == '__main__':
     bert_path = 'D:/Work/Update_Everyday/Bert-Chinese-Text-Classification-Pytorch/bert_pretrain'
     pad_size = 32
     te = TokenEncode(bert_path, pad_size)
-    a, b = te.get_encode('我是一只小可爱a')
+    a, b = te.get_encode('我是一只小可爱')
     print(a.shape, b.shape)
+    c, d = te.get_token_mask('我是一只小可爱')
+    print(c.shape, d.shape)
+    print(c, d)
