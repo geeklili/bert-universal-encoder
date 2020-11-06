@@ -1,24 +1,22 @@
 # bert-universal-encoder
-提供了常见bert的通用字符串到编码的预处理方法
+1. 提供了常见bert的通用字符串到编码的预处理方法
+2. 提供了bert的finetune示例
 
 #### 项目入口
 - 项目的入口文件是：
 ```
 bert_encoder.py
+bert_finetune.py
 ```
 
-- 项目的主函数只有一个，输入是一个字符串，输出是一段编码，编码的大小可以设置
+- 项目的函数get_encode，输入是一个字符串，输出是一段编码，编码的大小可以设置
+- 项目的函数get_token_mask，输入是一个字符串，输出是字符串的id列表和mask列表，这两个列表可以传入bert模型进行bert训练
+
 如下：
-#### 调用的方法如下
+#### get_encode调用的方法如下
 
-输入
-```
-我是一只小可爱
-```
-所以
 ```
 input_str = '我是一只小可爱'
-
 # pad_size指的是输入的序列的长度的最大值
 pad_size = 32
 # bert_path指的是存放bert模型的文件夹, 不同的bert模型放入不同的文件夹，只要是切换文件夹就可以切换模型
@@ -26,7 +24,6 @@ bert_path = '/opt/app/bert_one_path/'
 # 直接实例化模型，并调用get_encode方法即可
 te = TokenEncode(bert_path, pad_size)
 a, b = te.get_encode(input_str)
-
 print(a)
 print(b)
 ```
