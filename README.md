@@ -14,7 +14,6 @@ bert_finetune.py
 
 如下：
 #### get_encode调用的方法如下
-
 ```
 input_str = '我是一只小可爱'
 # pad_size指的是输入的序列的长度的最大值
