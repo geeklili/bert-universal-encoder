@@ -5,7 +5,7 @@ from pytorch_pretrain import BertModel, BertTokenizer
 
 
 class TokenEncode(object):
-    def __init__(self, bert_path, pad_size=32):
+    def __init__(self, bert_path, pad_size=64):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.bert_path = bert_path
         np.random.seed(1)
@@ -71,6 +71,39 @@ class TokenEncode(object):
         # print(mask)
         return token_ids, mask
 
+    def get_token_segment_mask(self, content1, content2):
+        content1 = content1.strip()
+        content2 = content2.strip()
+        token1 = self.tokenizer.tokenize(content1)
+        token1 = ['[CLS]'] + token1 + ['[SEP]']
+
+        token2 = self.tokenizer.tokenize(content2)
+        token2 = token2 + ['[SEP]']
+        token = token1 + token2
+
+        segment = [0] * len(token1) + [1] * len(token2)
+        # 根据vocab.txt将token列表转换成index列表
+        # print(token)
+        token_ids = self.tokenizer.convert_tokens_to_ids(token)
+
+        if len(token) < self.pad_size:
+            mask = [1] * len(token_ids) + [0] * (self.pad_size - len(token))
+            token_ids += ([0] * (self.pad_size - len(token)))
+            segment += ([0] * (self.pad_size - len(token)))
+
+        else:
+            mask = [1] * self.pad_size
+            token_ids = token_ids[:self.pad_size]
+            segment = segment[:self.pad_size]
+        # token_ids：padding后字符列表的index列表
+        # label：标签的编号
+        # seq_len：字符有多长，其长度是小于等于seq_len的
+        # mask：和token_ids一样的长度，seq_len的前面为1，后面是零
+        token_ids = torch.tensor(token_ids).reshape(-1, self.pad_size).to(self.device)
+        mask = torch.tensor(mask).reshape(-1, self.pad_size).to(self.device)
+        segment = torch.tensor(segment).reshape(-1, self.pad_size).to(self.device)
+        return token_ids, segment, mask
+
 
 if __name__ == '__main__':
     bert_path = 'D:/Work/Update_Everyday/Bert-Chinese-Text-Classification-Pytorch/bert_pretrain'
@@ -78,6 +111,20 @@ if __name__ == '__main__':
     te = TokenEncode(bert_path, pad_size)
     a, b = te.get_encode('我是一只小可爱')
     print(a.shape, b.shape)
-    c, d = te.get_token_mask('我是一只小可爱')
-    print(c.shape, d.shape)
-    print(c, d)
+    q = torch.nn.AvgPool1d(3)
+    q1 = q(a)
+    print(q1.shape)
+    print(a[:, 0])
+    print(b)
+
+    # a = tf.keras.layers.GlobalMaxPooling1D()(q_embedding)
+    # t = q_embedding[:, -1]
+    # e = q_embedding[:, 0]
+
+
+    # c, d = te.get_token_mask('今天太阳很好呀')
+    # print(c.shape, d.shape)
+    # print(c, d)
+    # e, f, g = te.get_token_segment_mask('我是一只小可爱', '今天太阳很好呀')
+    # print(e.shape, f.shape, g.shape)
+    # print(e, f, g)
