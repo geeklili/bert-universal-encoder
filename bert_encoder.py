@@ -121,7 +121,6 @@ if __name__ == '__main__':
     # t = q_embedding[:, -1]
     # e = q_embedding[:, 0]
 
-
     # c, d = te.get_token_mask('今天太阳很好呀')
     # print(c.shape, d.shape)
     # print(c, d)

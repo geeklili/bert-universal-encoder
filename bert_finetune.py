@@ -9,7 +9,6 @@ import numpy as np
 from pytorch_pretrain import BertModel, BertTokenizer
 from collections import defaultdict
 
-
 EPOCH = 200
 BATCH_SIZE = 10
 PAD_SIZE = 256
@@ -38,14 +37,15 @@ def find_review_time_wheather_useful():
     di_score = sorted(di_score.items(), key=lambda x: x[1])
     print(di_score)
 
+
 # find_review_time_wheather_useful()
 # new_data = data[['CONTENT','EVALUATION_SCORES']]
 # new_data[data['EVALUATION_SCORES']==5]
 
 # data[['TITLE', 'CONTENT', 'SHOP_NAME', 'MATRIX_IDS', 'BRAND', 'LINE', 'EVALUATOR_RANK', 'EVALUATION_SCORES']]
 
-comment_li = [i[0] for i in data[['CONTENT','EVALUATION_SCORES']].values]
-score_li = [int(i[1])-1 for i in data[['CONTENT','EVALUATION_SCORES']].values]
+comment_li = [i[0] for i in data[['CONTENT', 'EVALUATION_SCORES']].values]
+score_li = [int(i[1]) - 1 for i in data[['CONTENT', 'EVALUATION_SCORES']].values]
 score_one_hot_li = torch.tensor(pd.get_dummies(data['EVALUATION_SCORES']).values).long()
 score_two_li = [1 if j > 3 else 0 for j in score_li]
 # 1. 创建bert语言模型的实例，用以获取token的向量
@@ -55,6 +55,7 @@ comment_li_encode = list()
 for i in comment_li:
     a, b = te.get_token_mask(i)
     comment_li_encode.append([a.cpu().detach().numpy(), b.cpu().detach().numpy()])
+
 
 # 3. 创建dataset于dataloader
 class MyDateset(Dataset):
@@ -74,6 +75,7 @@ class MyDateset(Dataset):
 # dataset = MyDateset(comment_li_encode, score_li)
 dataset = MyDateset(comment_li_encode, score_two_li)
 data_iter = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True, drop_last=False, num_workers=5)
+
 
 # 4. 创建模型
 class SentimentAnalysisModel(torch.nn.Module):
@@ -102,6 +104,7 @@ model = SentimentAnalysisModel(768, 192, 2).to(device)
 criterion = torch.nn.CrossEntropyLoss()
 # opti = torch.optim.SGD(model.parameters(), lr=LR)
 opti = torch.optim.Adam(model.parameters(), lr=LR)
+
 
 # 6. 预测，计损，零反替
 def evaluate_model(model):
